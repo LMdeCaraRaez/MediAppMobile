@@ -1,5 +1,6 @@
 package com.example.mediapp.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,6 +40,7 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp),
+
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -70,6 +72,7 @@ fun LoginScreen(
                     visualTransformation = PasswordVisualTransformation(),
                     singleLine = true
                 )
+
 
                 Button(
                     onClick = { viewModel.login(username, password) },

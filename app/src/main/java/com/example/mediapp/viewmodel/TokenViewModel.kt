@@ -6,11 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mediapp.data.model.UserModelResponse
+import com.example.mediapp.data.repository.ConsultaRepository
 import com.example.mediapp.data.repository.TokenRepository
 import kotlinx.coroutines.launch
 
-class TokenViewModel: ViewModel() {
+class TokenViewModel : ViewModel() {
     private val repository = TokenRepository()
+    private val consultaRepository = ConsultaRepository()
 
     var token by mutableStateOf<String?>(null)
         private set
@@ -36,6 +38,17 @@ class TokenViewModel: ViewModel() {
 
                 val usuarioResponse = repository.getUsuario(response.token)
                 user = usuarioResponse
+            } catch (e: Exception) {
+                error = "Login fallido: ${e.message}"
+            }
+        }
+    }
+
+    fun postConsulta(paciente: Int, medico: Int, fecha: String, horaInicio: String) {
+        viewModelScope.launch {
+            try {
+                val response = consultaRepository.postConsulta(token!! ,paciente, medico, fecha, horaInicio)
+
             } catch (e: Exception) {
                 error = "Login fallido: ${e.message}"
             }

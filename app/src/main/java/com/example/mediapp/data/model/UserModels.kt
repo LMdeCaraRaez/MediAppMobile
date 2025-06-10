@@ -6,7 +6,7 @@ data class UserModelResponse(
     @SerializedName("@context")
     val context: String,
     @SerializedName("@id")
-    val id: String,
+    val idExterno: String,
     @SerializedName("@type")
     val type: String,
     val admin: Boolean,
@@ -20,7 +20,8 @@ data class UserModelResponse(
     val email: String,
     val finTurno: String,
     val genero: String,
-    val idInterno: Int, // Renombrado para evitar error con id ya usado
+    val id: Int, // Renombrado para evitar error con id ya usado
+    val medicoAsignado: String, // Renombrado para evitar error con id ya usado
     val inicioTurno: String,
     val nombre: String,
     val pacientes: List<String>,

@@ -1,6 +1,8 @@
 package com.example.mediapp.data.remote
 
 import android.media.session.MediaSession.Token
+import com.example.mediapp.data.model.ConsultasRequest
+import com.example.mediapp.data.model.ConsultasResponseModel
 import com.example.mediapp.data.model.TokenRequest
 import com.example.mediapp.data.model.TokenResponse
 import com.example.mediapp.data.model.UserModelResponse
@@ -15,4 +17,7 @@ interface ApiService {
 
     @GET("api/usuario")
     suspend fun getUsuario(@Header("Authorization") token: String): UserModelResponse
+
+    @POST("api/consultas")
+    suspend fun postConsulta(@Header("Authorization") token: String, @Body request: ConsultasRequest): ConsultasResponseModel
 }

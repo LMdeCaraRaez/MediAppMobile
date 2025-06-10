@@ -9,10 +9,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mediapp.viewmodel.TokenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    viewModel: TokenViewModel,
+    navigatePedirConsulta: () -> Unit,
+    navigateVerRecetas: () -> Unit,
+    navigateVerConsultas: () -> Unit
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -39,21 +45,21 @@ fun HomeScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(
-                onClick = { /* TODO */ },
+                onClick = { navigatePedirConsulta() },
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
             ) {
                 Text(text = "Pedir una consulta", fontSize = 16.sp)
             }
 
             Button(
-                onClick = { /* TODO */ },
+                onClick = { navigateVerRecetas() },
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
             ) {
                 Text(text = "Ver mis recetas", fontSize = 16.sp)
             }
 
             Button(
-                onClick = { /* TODO */ },
+                onClick = { navigateVerConsultas() },
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
             ) {
                 Text(text = "Ver mis consultas", fontSize = 16.sp)

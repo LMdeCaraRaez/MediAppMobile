@@ -8,13 +8,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mediapp.ui.screens.HomeScreen
 import com.example.mediapp.ui.screens.LoginScreen
+import com.example.mediapp.ui.screens.PedirConsultaScreen
+import com.example.mediapp.ui.screens.VerConsultas
+import com.example.mediapp.ui.screens.VerRecetas
 import com.example.mediapp.ui.theme.MediAppTheme
 import com.example.mediapp.viewmodel.TokenViewModel
 
@@ -51,7 +53,33 @@ fun AppNavHost(viewModel: TokenViewModel = viewModel()) {
             )
         }
         composable("home") {
-            HomeScreen()
+            HomeScreen(
+                viewModel = viewModel,
+                navigatePedirConsulta = {
+                    navController.navigate("pedir_consulta") {
+                        popUpTo("home") { inclusive = true }
+                    }
+                },
+                navigateVerRecetas = {
+                    navController.navigate("ver_recetas") {
+                        popUpTo("home") { inclusive = true }
+                    }
+                },
+            ) {
+                navController.navigate("ver_consultas") {
+                    popUpTo("home") { inclusive = true }
+                }
+            }
+
+        }
+        composable("pedir_consulta") {
+            PedirConsultaScreen(viewModel = viewModel, navController = navController)
+        }
+        composable("ver_recetas") {
+            VerConsultas(viewModel = viewModel, navController = navController)
+        }
+        composable("ver_consultas") {
+            VerRecetas(viewModel = viewModel, navController = navController)
         }
     }
 }
