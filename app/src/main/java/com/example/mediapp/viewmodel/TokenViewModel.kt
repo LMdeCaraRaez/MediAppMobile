@@ -5,19 +5,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mediapp.data.model.RecetasResponseModel
 import com.example.mediapp.data.model.UserModelResponse
 import com.example.mediapp.data.repository.ConsultaRepository
+import com.example.mediapp.data.repository.RecetaRepository
 import com.example.mediapp.data.repository.TokenRepository
 import kotlinx.coroutines.launch
 
 class TokenViewModel : ViewModel() {
     private val repository = TokenRepository()
     private val consultaRepository = ConsultaRepository()
+    private val recetaRepository = RecetaRepository()
 
     var token by mutableStateOf<String?>(null)
         private set
 
     var refreshToken by mutableStateOf<String?>(null)
+        private set
+
+    var recetasResponse by mutableStateOf<RecetasResponseModel?>(null)
         private set
 
     var error by mutableStateOf<String?>(null)
@@ -47,10 +53,28 @@ class TokenViewModel : ViewModel() {
     fun postConsulta(paciente: Int, medico: Int, fecha: String, horaInicio: String) {
         viewModelScope.launch {
             try {
-                val response = consultaRepository.postConsulta(token!! ,paciente, medico, fecha, horaInicio)
+                val response =
+                    consultaRepository.postConsulta(token!!, paciente, medico, fecha, horaInicio)
 
             } catch (e: Exception) {
                 error = "Login fallido: ${e.message}"
+            }
+        }
+    }
+
+    fun getRecetas(
+        orden: String = "nombreMedicamento",
+        direccion: String = "ASC",
+        page: Int = 1
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = recetaRepository.getRecetas(token!!, orden, direccion, page)
+
+                recetasResponse = response
+
+            } catch (e: Exception) {
+                error = "Error en recetas: ${e.message}"
             }
         }
     }

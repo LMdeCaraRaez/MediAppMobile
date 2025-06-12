@@ -57,7 +57,7 @@ fun AppNavHost(viewModel: TokenViewModel = viewModel()) {
                 viewModel = viewModel,
                 navigatePedirConsulta = {
                     navController.navigate("pedir_consulta") {
-                        popUpTo("home") { inclusive = true }
+                        popUpTo("home") { inclusive = false }
                     }
                 },
                 navigateVerRecetas = {
@@ -76,10 +76,10 @@ fun AppNavHost(viewModel: TokenViewModel = viewModel()) {
             PedirConsultaScreen(viewModel = viewModel, navController = navController)
         }
         composable("ver_recetas") {
-            VerConsultas(viewModel = viewModel, navController = navController)
+            VerRecetas(viewModel = viewModel, navController = navController)
         }
         composable("ver_consultas") {
-            VerRecetas(viewModel = viewModel, navController = navController)
+            VerConsultas(viewModel = viewModel, navController = navController)
         }
     }
 }

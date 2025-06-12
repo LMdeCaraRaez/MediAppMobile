@@ -3,9 +3,7 @@ package com.example.mediapp.data.repository
 import com.example.mediapp.data.model.ConsultasRequest
 import com.example.mediapp.data.model.ConsultasResponseModel
 import com.example.mediapp.data.remote.RetrofitClient
-
 class ConsultaRepository {
-
     suspend fun postConsulta(
         token: String,
         paciente: Int,

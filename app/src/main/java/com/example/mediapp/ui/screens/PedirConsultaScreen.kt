@@ -83,7 +83,7 @@ fun PedirConsultaScreen(viewModel: TokenViewModel, navController: NavHostControl
                 OutlinedTextField(
                     value = paciente,
                     onValueChange = {},
-                    label = { Text(viewModel.user?.id.toString()) },
+                    label = { Text("Paciente") },
                     modifier = Modifier
                         .fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -96,7 +96,7 @@ fun PedirConsultaScreen(viewModel: TokenViewModel, navController: NavHostControl
                 OutlinedTextField(
                     value = medico,
                     onValueChange = {},
-                    label = { Text(viewModel.user?.doctor.toString()) },
+                    label = { Text("Tu Doctor") },
                     modifier = Modifier
                         .fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
