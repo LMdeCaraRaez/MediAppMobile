@@ -62,12 +62,12 @@ fun AppNavHost(viewModel: TokenViewModel = viewModel()) {
                 },
                 navigateVerRecetas = {
                     navController.navigate("ver_recetas") {
-                        popUpTo("home") { inclusive = true }
+                        popUpTo("home") { inclusive = false }
                     }
                 },
             ) {
                 navController.navigate("ver_consultas") {
-                    popUpTo("home") { inclusive = true }
+                    popUpTo("home") { inclusive = false }
                 }
             }
 

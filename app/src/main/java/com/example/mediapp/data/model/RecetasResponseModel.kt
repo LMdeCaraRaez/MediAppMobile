@@ -9,7 +9,7 @@ data class RecetasResponseModel(
     val idExterno: String,
     @SerializedName("@type")
     val type: String,
-    @SerializedName("@hydra:member")
+    @SerializedName("hydra:member")
     val resultados: List<HydraMemberRecetas>,
     @SerializedName("hydra:totalItems")
     val totalItems: Int,

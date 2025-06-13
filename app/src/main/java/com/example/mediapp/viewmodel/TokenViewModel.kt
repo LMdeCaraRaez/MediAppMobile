@@ -1,5 +1,6 @@
 package com.example.mediapp.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -53,8 +54,7 @@ class TokenViewModel : ViewModel() {
     fun postConsulta(paciente: Int, medico: Int, fecha: String, horaInicio: String) {
         viewModelScope.launch {
             try {
-                val response =
-                    consultaRepository.postConsulta(token!!, paciente, medico, fecha, horaInicio)
+                val response = consultaRepository.postConsulta(token!!, paciente, medico, fecha, horaInicio)
 
             } catch (e: Exception) {
                 error = "Login fallido: ${e.message}"
@@ -63,15 +63,25 @@ class TokenViewModel : ViewModel() {
     }
 
     fun getRecetas(
-        orden: String = "nombreMedicamento",
-        direccion: String = "ASC",
+        orden: String = "fechaConsulta",
+        direccion: String = "DESC",
         page: Int = 1
     ) {
         viewModelScope.launch {
             try {
                 val response = recetaRepository.getRecetas(token!!, orden, direccion, page)
 
-                recetasResponse = response
+                if (recetasResponse == null || page == 1) {
+                    recetasResponse = response
+                } else {
+                    val recetasAnteriores = recetasResponse!!.resultados
+                    val nuevasRecetas = response.resultados
+
+                    recetasResponse = recetasResponse!!.copy(
+                        resultados = recetasAnteriores + nuevasRecetas
+                    )
+                }
+
 
             } catch (e: Exception) {
                 error = "Error en recetas: ${e.message}"

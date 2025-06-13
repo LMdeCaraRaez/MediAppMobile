@@ -91,7 +91,7 @@ fun LoginScreen(
                 }
 
                 error?.let {
-                    Text("Error: $it", color = Color.Red)
+                    Text("Usuario o contraseña incorrectos, intentelo de nuevo", color = Color.Red)
                 }
             }
         }
