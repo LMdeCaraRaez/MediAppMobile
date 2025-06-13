@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -98,7 +99,12 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
                         state = scrollState
                     ) {
                         item {
-                            Text(text = "Tus Consultas", fontWeight = FontWeight.Bold, fontSize = 32.sp, modifier = Modifier.padding(bottom = 12.dp))
+                            Text(
+                                text = "Tus Consultas",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 32.sp,
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            )
                         }
 
                         items(viewModel.buscarConsultasResponse!!.resultados.size) { index ->
@@ -115,7 +121,7 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
                             ) {
                                 Column(modifier = Modifier.padding(16.dp)) {
                                     Text(
-                                        text = formatoFechaBonita(consulta.consulta.fecha),
+                                        text = "Fecha: ${formatoFechaBonita(consulta.consulta.fecha)}",
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.primary
@@ -123,49 +129,48 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
 
                                     Spacer(modifier = Modifier.height(6.dp))
 
-                                    if (consulta.consulta.horaFin != null) {
+                                    Text(
+                                        text = "Horario: ${extraerHora(consulta.consulta.horaInicio)} a ${
+                                            extraerHora(
+                                                consulta.consulta.horaFin
+                                            )
+                                        }",
+                                        fontSize = 16.sp,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+
+                                    Spacer(modifier = Modifier.height(6.dp))
+
+                                    if (consulta.consulta.diagnostico != null) {
                                         Text(
-                                            text = "Horario: ${consulta.consulta.horaInicio} a ${consulta.consulta.horaFin}",
+                                            text = "Diagnóstico: " + consulta.consulta.diagnostico,
                                             fontSize = 16.sp,
                                             color = MaterialTheme.colorScheme.onSurface
                                         )
-
-                                        Spacer(modifier = Modifier.height(6.dp))
-                                    }
-
-
-                                    if (ZonedDateTime.parse(consulta.receta.fechaFinTratamiento).isAfter(
-                                            ZonedDateTime.now())) {
-                                        Text(
-                                            text = "Fin del tratamiento:",
-                                            fontSize = 14.sp,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                        Text(
-                                            text = formatoFechaBonita(consulta.receta.fechaFinTratamiento),
-                                            fontSize = 16.sp,
-                                            fontWeight = FontWeight.Medium,
-                                            color = MaterialTheme.colorScheme.onSurface
-                                        )
-
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Text(
-                                            text = "Intervalo entre tomas:",
-                                            fontSize = 14.sp,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                        Text(
-                                            text = "${consulta.receta.intervalo / 60} horas y ${consulta.receta.intervalo % 60} minutos",
-                                            fontSize = 16.sp,
-                                            fontWeight = FontWeight.Medium,
-                                            color = MaterialTheme.colorScheme.onSurface
-                                        )
+                                        Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(top = 12.dp)) {
+                                            Text(
+                                                text = "Ver detalle",
+                                                textAlign = TextAlign.Center,
+                                                fontSize = 16.sp,
+                                                color = MaterialTheme.colorScheme.onSurface,
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
                                     } else {
-                                        Text(text = "Tratamiento ya finalizado",
+                                        Text(
+                                            text = "Consulta no pasada",
                                             fontSize = 16.sp,
-                                            fontWeight = FontWeight.Medium,
                                             color = Color.Red
                                         )
+                                        Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(top = 12.dp)) {
+                                            Text(
+                                                text = "Cancelar Consulta",
+                                                textAlign = TextAlign.Center,
+                                                fontSize = 16.sp,
+                                                color = Color.Red,
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -187,7 +192,7 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
                                     )
                                 }
 
-                                if (viewModel.recetasResponse!!.resultados.size === viewModel.recetasResponse!!.totalItems) {
+                                if (viewModel.buscarConsultasResponse!!.resultados.size === viewModel.buscarConsultasResponse!!.totalItems) {
                                     Text(
                                         text = "No hay mas resultados",
                                         fontWeight = FontWeight.Bold,
@@ -196,7 +201,7 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
                                 } else {
                                     Button(onClick = {
                                         loadedPages.intValue = loadedPages.intValue + 1
-                                        viewModel.getRecetas(page = loadedPages.intValue)
+                                        viewModel.getConsultas(page = loadedPages.intValue)
                                     }) {
                                         Text(text = "Cargar más")
                                     }
@@ -221,4 +226,11 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
             }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun extraerHora(fechaIso: String): String {
+    val zonedDateTime = ZonedDateTime.parse(fechaIso)
+    val formatter = DateTimeFormatter.ofPattern("HH:mm:ss", Locale("es"))
+    return zonedDateTime.format(formatter)
 }
