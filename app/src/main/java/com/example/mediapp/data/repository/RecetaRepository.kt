@@ -1,6 +1,5 @@
 package com.example.mediapp.data.repository
 
-import com.example.mediapp.data.model.ConsultasRequest
 import com.example.mediapp.data.model.RecetasResponseModel
 import com.example.mediapp.data.remote.RetrofitClient
 

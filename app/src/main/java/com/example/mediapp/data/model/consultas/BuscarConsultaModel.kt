@@ -1,23 +1,18 @@
-package com.example.mediapp.data.model
+package com.example.mediapp.data.model.consultas
 
 import com.google.gson.annotations.SerializedName
 
-data class ConsultasResponseModel(
+data class BuscarConsultaModel(
     @SerializedName("@context")
     val context: String,
-
     @SerializedName("@id")
     val id: String,
-
     @SerializedName("@type")
     val type: String,
-
     @SerializedName("hydra:member")
-    val hydraMember: List<HydraMember>,
-
+    val resultados: List<HydraMemberX>,
     @SerializedName("hydra:totalItems")
-    val hydraTotalItems: Int,
-
+    val totalItems: Int,
     @SerializedName("hydra:view")
-    val hydraView: HydraView
+    val view: HydraViewX
 )

@@ -1,6 +1,5 @@
 package com.example.mediapp.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mediapp.data.model.RecetasResponseModel
 import com.example.mediapp.data.model.UserModelResponse
+import com.example.mediapp.data.model.consultas.BuscarConsultaModel
 import com.example.mediapp.data.repository.ConsultaRepository
 import com.example.mediapp.data.repository.RecetaRepository
 import com.example.mediapp.data.repository.TokenRepository
@@ -25,6 +25,8 @@ class TokenViewModel : ViewModel() {
         private set
 
     var recetasResponse by mutableStateOf<RecetasResponseModel?>(null)
+        private set
+    var buscarConsultasResponse by mutableStateOf<BuscarConsultaModel?>(null)
         private set
 
     var error by mutableStateOf<String?>(null)
@@ -85,6 +87,33 @@ class TokenViewModel : ViewModel() {
 
             } catch (e: Exception) {
                 error = "Error en recetas: ${e.message}"
+            }
+        }
+    }
+
+    fun getConsultas(
+        orden: String = "fecha",
+        direccion: String = "DESC",
+        page: Int = 1
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = consultaRepository.getConsultas(token!!, orden, direccion, page)
+
+                if (buscarConsultasResponse == null || page == 1) {
+                    buscarConsultasResponse = response
+                } else {
+                    val recetasAnteriores = buscarConsultasResponse!!.resultados
+                    val nuevasRecetas = response.resultados
+
+                    buscarConsultasResponse = buscarConsultasResponse!!.copy(
+                        resultados = recetasAnteriores + nuevasRecetas
+                    )
+                }
+
+
+            } catch (e: Exception) {
+                error = "Error en consultas: ${e.message}"
             }
         }
     }

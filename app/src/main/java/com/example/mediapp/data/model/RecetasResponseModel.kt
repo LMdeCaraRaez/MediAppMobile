@@ -1,5 +1,6 @@
 package com.example.mediapp.data.model
 
+import com.example.mediapp.data.model.consulta.HydraView
 import com.google.gson.annotations.SerializedName
 
 data class RecetasResponseModel(

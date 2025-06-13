@@ -1,4 +1,4 @@
-package com.example.mediapp.data.model
+package com.example.mediapp.data.model.consulta
 
 data class ConsultasRequest (
     val paciente: Int,
