@@ -7,10 +7,13 @@ import com.example.mediapp.data.model.TokenRequest
 import com.example.mediapp.data.model.TokenResponse
 import com.example.mediapp.data.model.UserModelResponse
 import com.example.mediapp.data.model.consultas.BuscarConsultaModel
+import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -41,4 +44,10 @@ interface ApiService {
         @Query("orden") orden: String,
         @Query("direccion") direccion: String
     ): BuscarConsultaModel
+
+    @DELETE("api/consultas/{id}")
+    suspend fun deleteConsulta(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Response<ConsultasResponseModel>
 }

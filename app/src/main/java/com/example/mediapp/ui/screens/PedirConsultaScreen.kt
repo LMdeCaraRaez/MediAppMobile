@@ -1,6 +1,7 @@
 package com.example.mediapp.ui.screens
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,11 +22,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.mediapp.ui.theme.Secundario
@@ -38,8 +41,15 @@ fun PedirConsultaScreen(viewModel: TokenViewModel, navController: NavHostControl
     val hora = remember { mutableStateOf("") }
     val paciente = "pacopizzaDoctorAlcala"
     val medico = "pacopizzaDoctorAlcala"
+    val error = viewModel.error
+    val context = LocalContext.current
 
-    Log.i("eeeo", viewModel.user.toString())
+    LaunchedEffect(error) {
+        error?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        }
+    }
+
 
     Box(
         modifier = Modifier
@@ -75,6 +85,7 @@ fun PedirConsultaScreen(viewModel: TokenViewModel, navController: NavHostControl
                     value = hora.value,
                     onValueChange = { hora.value = it },
                     label = { Text("Hora de inicio") },
+                    placeholder = { Text(text =  "(HH:MM)")},
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -83,6 +94,7 @@ fun PedirConsultaScreen(viewModel: TokenViewModel, navController: NavHostControl
                 OutlinedTextField(
                     value = paciente,
                     onValueChange = {},
+                    readOnly = true,
                     label = { Text("Paciente") },
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -95,6 +107,7 @@ fun PedirConsultaScreen(viewModel: TokenViewModel, navController: NavHostControl
 
                 OutlinedTextField(
                     value = medico,
+                    readOnly = true,
                     onValueChange = {},
                     label = { Text("Tu Doctor") },
                     modifier = Modifier

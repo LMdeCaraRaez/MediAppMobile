@@ -31,6 +31,8 @@ class TokenViewModel : ViewModel() {
 
     var error by mutableStateOf<String?>(null)
         private set
+    var deleteSuccess by mutableStateOf<String?>(null)
+        private set
 
     var user by mutableStateOf<UserModelResponse?>(null)
         private set
@@ -57,6 +59,7 @@ class TokenViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = consultaRepository.postConsulta(token!!, paciente, medico, fecha, horaInicio)
+
 
             } catch (e: Exception) {
                 error = "Login fallido: ${e.message}"
@@ -114,6 +117,26 @@ class TokenViewModel : ViewModel() {
 
             } catch (e: Exception) {
                 error = "Error en consultas: ${e.message}"
+            }
+        }
+    }
+
+    fun deleteConsulta(
+        id: String
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = consultaRepository.deleteConsulta(token!!, id)
+                deleteSuccess = "cargando"
+
+                if (response.isSuccessful) {
+                    getConsultas()
+                    deleteSuccess = "Consulta borrada correctamente"
+                }
+
+            } catch (e: Exception) {
+                error = "Error borrando la consulta: ${e.message}"
+
             }
         }
     }

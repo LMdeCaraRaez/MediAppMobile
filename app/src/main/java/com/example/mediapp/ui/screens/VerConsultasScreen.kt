@@ -1,6 +1,8 @@
 package com.example.mediapp.ui.screens
 
 import android.os.Build
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +38,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,12 +58,18 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
         viewModel.getConsultas()
     }
 
+    val error = viewModel.error
+    val deleteSuccess = viewModel.deleteSuccess
+    val context = LocalContext.current
+    val scrollState = LazyListState()
+    val scope = rememberCoroutineScope()
+
     val loadedPages = remember {
         mutableIntStateOf(1)
     }
 
-    val scrollState = LazyListState()
-    val scope = rememberCoroutineScope()
+
+
 
     Scaffold(
         topBar = {
@@ -147,22 +156,17 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
                                             fontSize = 16.sp,
                                             color = MaterialTheme.colorScheme.onSurface
                                         )
-                                        Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(top = 12.dp)) {
-                                            Text(
-                                                text = "Ver detalle",
-                                                textAlign = TextAlign.Center,
-                                                fontSize = 16.sp,
-                                                color = MaterialTheme.colorScheme.onSurface,
-                                                modifier = Modifier.fillMaxWidth()
-                                            )
-                                        }
                                     } else {
                                         Text(
                                             text = "Consulta no pasada",
                                             fontSize = 16.sp,
                                             color = Color.Red
                                         )
-                                        Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(top = 12.dp)) {
+                                        Button(onClick = {
+                                            Log.e("consultaID", consulta.consulta.id.toString())
+
+                                            viewModel.deleteConsulta(consulta.consulta.id.toString())
+                                        }, modifier = Modifier.padding(top = 12.dp)) {
                                             Text(
                                                 text = "Cancelar Consulta",
                                                 textAlign = TextAlign.Center,
@@ -222,6 +226,19 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
                     ) {
                         CircularProgressIndicator()
                     }
+                }
+            }
+
+            LaunchedEffect(error) {
+                error?.let {
+                    Toast.makeText(context, "Error al intentar borrar la consulta", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            LaunchedEffect(deleteSuccess) {
+                deleteSuccess?.let {
+                    if (deleteSuccess === "Consulta borrada correctamente")
+                    Toast.makeText(context, "Se ha borrado la consulta, cargando lista de nuevo...", Toast.LENGTH_LONG).show()
                 }
             }
         }

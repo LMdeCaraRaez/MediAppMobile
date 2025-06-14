@@ -1,10 +1,11 @@
 package com.example.mediapp.data.repository
 
-import com.example.mediapp.data.model.RecetasResponseModel
 import com.example.mediapp.data.model.consulta.ConsultasRequest
 import com.example.mediapp.data.model.consulta.ConsultasResponseModel
 import com.example.mediapp.data.model.consultas.BuscarConsultaModel
 import com.example.mediapp.data.remote.RetrofitClient
+import retrofit2.Response
+
 class ConsultaRepository {
     suspend fun postConsulta(
         token: String,
@@ -24,5 +25,12 @@ class ConsultaRepository {
         page: Int
     ): BuscarConsultaModel {
         return RetrofitClient.api.getConsultas("Bearer $token", page, orden, direccion)
+    }
+
+    suspend fun deleteConsulta(
+        token: String,
+        id: String,
+    ): Response<ConsultasResponseModel> {
+        return RetrofitClient.api.deleteConsulta("Bearer $token", id)
     }
 }
