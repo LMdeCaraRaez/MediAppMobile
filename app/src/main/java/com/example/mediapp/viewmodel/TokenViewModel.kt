@@ -1,5 +1,6 @@
 package com.example.mediapp.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -28,6 +29,7 @@ class TokenViewModel : ViewModel() {
         private set
     var buscarConsultasResponse by mutableStateOf<BuscarConsultaModel?>(null)
         private set
+    var horasResponse by mutableStateOf<List<String>>(emptyList())
 
     var error by mutableStateOf<String?>(null)
         private set
@@ -117,6 +119,24 @@ class TokenViewModel : ViewModel() {
 
             } catch (e: Exception) {
                 error = "Error en consultas: ${e.message}"
+            }
+        }
+    }
+
+    fun getHoras(
+        id: String,
+        fecha: String
+    ) {
+        viewModelScope.launch {
+            try {
+                val response = consultaRepository.getHoras(id, fecha)
+
+                horasResponse = response
+
+                Log.i("HGO", horasResponse.toString())
+
+            } catch (e: Exception) {
+                error = "Error en obtenerHoras: ${e.message}"
             }
         }
     }

@@ -6,6 +6,7 @@ import com.example.mediapp.data.model.RecetasResponseModel
 import com.example.mediapp.data.model.TokenRequest
 import com.example.mediapp.data.model.TokenResponse
 import com.example.mediapp.data.model.UserModelResponse
+import com.example.mediapp.data.model.consulta.HorasResponseModel
 import com.example.mediapp.data.model.consultas.BuscarConsultaModel
 import retrofit2.Response
 import retrofit2.http.Body
@@ -50,4 +51,10 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("id") id: String
     ): Response<ConsultasResponseModel>
+
+    @GET("api/usuarios/horas_disponibles/{id}")
+    suspend fun getHorasDisponibles(
+        @Path("id") id: String,
+        @Query("fecha") fecha: String,
+    ): HorasResponseModel
 }

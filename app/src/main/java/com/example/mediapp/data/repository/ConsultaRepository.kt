@@ -2,6 +2,7 @@ package com.example.mediapp.data.repository
 
 import com.example.mediapp.data.model.consulta.ConsultasRequest
 import com.example.mediapp.data.model.consulta.ConsultasResponseModel
+import com.example.mediapp.data.model.consulta.HorasResponseModel
 import com.example.mediapp.data.model.consultas.BuscarConsultaModel
 import com.example.mediapp.data.remote.RetrofitClient
 import retrofit2.Response
@@ -25,6 +26,13 @@ class ConsultaRepository {
         page: Int
     ): BuscarConsultaModel {
         return RetrofitClient.api.getConsultas("Bearer $token", page, orden, direccion)
+    }
+
+    suspend fun getHoras(
+        id: String,
+        fecha: String
+    ): HorasResponseModel {
+        return RetrofitClient.api.getHorasDisponibles(id, fecha)
     }
 
     suspend fun deleteConsulta(
