@@ -1,6 +1,5 @@
 package com.example.mediapp.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -35,6 +34,8 @@ class TokenViewModel : ViewModel() {
         private set
     var deleteSuccess by mutableStateOf<String?>(null)
         private set
+    var postConsultaSuccess by mutableStateOf<String?>(null)
+        private set
 
     var user by mutableStateOf<UserModelResponse?>(null)
         private set
@@ -60,9 +61,11 @@ class TokenViewModel : ViewModel() {
     fun postConsulta(paciente: Int, medico: Int, fecha: String, horaInicio: String) {
         viewModelScope.launch {
             try {
+                postConsultaSuccess = "cargando"
                 val response = consultaRepository.postConsulta(token!!, paciente, medico, fecha, horaInicio)
 
 
+                postConsultaSuccess = "Se ha creado la consulta"
             } catch (e: Exception) {
                 error = "Login fallido: ${e.message}"
             }
@@ -133,7 +136,6 @@ class TokenViewModel : ViewModel() {
 
                 horasResponse = response
 
-                Log.i("HGO", horasResponse.toString())
 
             } catch (e: Exception) {
                 error = "Error en obtenerHoras: ${e.message}"

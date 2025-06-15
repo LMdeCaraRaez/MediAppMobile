@@ -68,9 +68,6 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
         mutableIntStateOf(1)
     }
 
-
-
-
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(

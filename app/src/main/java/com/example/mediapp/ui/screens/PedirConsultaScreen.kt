@@ -57,13 +57,16 @@ fun PedirConsultaScreen(viewModel: TokenViewModel, navController: NavHostControl
     val medico = "Tu doctor"
     val error = viewModel.error
     val context = LocalContext.current
+    val postConsultaSuccess = viewModel.postConsultaSuccess
     var mostrarErrorFecha by remember { mutableStateOf(false) }
     val formatoCorrecto = remember { Regex("""\d{4}-\d{2}-\d{2}""") }
     val hoy = remember { LocalDate.now() }
+    var consultaPedida = false
 
     LaunchedEffect(error) {
         error?.let {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            consultaPedida = false
         }
     }
 
@@ -170,16 +173,25 @@ fun PedirConsultaScreen(viewModel: TokenViewModel, navController: NavHostControl
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(onClick = {
-                        Log.i("eeeee","Hora: ${hora.value}")
 
-
-
-                        viewModel.postConsulta(
-                            fecha = fecha.value,
-                            horaInicio = hora.value,
-                            medico = numeroMedico!!.toInt(),
-                            paciente = viewModel.user!!.id,
-                        )
+                        if (!consultaPedida) {
+                            consultaPedida = true
+                            if (mostrarErrorFecha || hora.value == "") {
+                                Toast.makeText(
+                                    context,
+                                    "Escribe unas fecha y hora correctas por favor",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                consultaPedida = false
+                            } else {
+                                viewModel.postConsulta(
+                                    fecha = fecha.value,
+                                    horaInicio = hora.value,
+                                    medico = numeroMedico!!.toInt(),
+                                    paciente = viewModel.user!!.id,
+                                )
+                            }
+                        }
 
 
                     }) {
@@ -192,6 +204,17 @@ fun PedirConsultaScreen(viewModel: TokenViewModel, navController: NavHostControl
                         Text("Volver")
                     }
                 }
+            }
+        }
+    }
+
+    LaunchedEffect(postConsultaSuccess) {
+        postConsultaSuccess?.let {
+            if (postConsultaSuccess === "Se ha creado la consulta") {
+                Toast.makeText(context, "Se ha creado la consulta", Toast.LENGTH_LONG).show()
+                navController.popBackStack()
+            } else if (postConsultaSuccess === "cargando") {
+                Toast.makeText(context, "Cargando", Toast.LENGTH_LONG).show()
             }
         }
     }
