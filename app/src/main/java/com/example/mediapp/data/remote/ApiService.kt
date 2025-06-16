@@ -35,6 +35,7 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("page") page: Int,
         @Query("orden") orden: String,
+        @Query("propias") propias: String,
         @Query("direccion") direccion: String
     ): RecetasResponseModel
 
@@ -43,6 +44,7 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("page") page: Int,
         @Query("orden") orden: String,
+        @Query("propias") propias: String,
         @Query("direccion") direccion: String
     ): BuscarConsultaModel
 

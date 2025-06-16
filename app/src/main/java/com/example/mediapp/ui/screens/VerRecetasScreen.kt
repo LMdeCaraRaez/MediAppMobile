@@ -186,45 +186,52 @@ fun VerRecetas(viewModel: TokenViewModel, navController: NavHostController) {
                                 }
                             }
                         }
-                        item {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Button(
-                                    onClick = {
-                                        scope.launch {
-                                            scrollState.scrollToItem(0)
-                                        }
 
-                                    },
-                                    modifier = Modifier.padding(bottom = 8.dp),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = Color(0xFF1565C0)
-                                    )
+                        if (viewModel.recetasResponse!!.resultados.isEmpty()) {
+                            item {
+                                Text(text = "No hay ninguna receta para ver")
+                            }
+                        } else {
+                            item {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.KeyboardArrowUp,
-                                        contentDescription = "Volver arriba"
-                                    )
-                                }
-
-                                if (viewModel.recetasResponse!!.resultados.size === viewModel.recetasResponse!!.totalItems) {
-                                    Text(
-                                        text = "No hay mas resultados",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 18.sp
-                                    )
-                                } else {
                                     Button(
                                         onClick = {
-                                            loadedPages.intValue = loadedPages.intValue + 1
-                                            viewModel.getRecetas(page = loadedPages.intValue)
-                                        }, colors = ButtonDefaults.buttonColors(
+                                            scope.launch {
+                                                scrollState.scrollToItem(0)
+                                            }
+
+                                        },
+                                        modifier = Modifier.padding(bottom = 8.dp),
+                                        colors = ButtonDefaults.buttonColors(
                                             containerColor = Color(0xFF1565C0)
                                         )
                                     ) {
-                                        Text(text = "Cargar más")
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowUp,
+                                            contentDescription = "Volver arriba"
+                                        )
+                                    }
+
+                                    if (viewModel.recetasResponse!!.resultados.size === viewModel.recetasResponse!!.totalItems) {
+                                        Text(
+                                            text = "No hay mas resultados",
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 18.sp
+                                        )
+                                    } else {
+                                        Button(
+                                            onClick = {
+                                                loadedPages.intValue = loadedPages.intValue + 1
+                                                viewModel.getRecetas(page = loadedPages.intValue)
+                                            }, colors = ButtonDefaults.buttonColors(
+                                                containerColor = Color(0xFF1565C0)
+                                            )
+                                        ) {
+                                            Text(text = "Cargar más")
+                                        }
                                     }
                                 }
                             }

@@ -61,7 +61,8 @@ class TokenViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 postConsultaSuccess = "cargando"
-                val response = consultaRepository.postConsulta(token!!, paciente, medico, fecha, horaInicio)
+                val response =
+                    consultaRepository.postConsulta(token!!, paciente, medico, fecha, horaInicio)
 
 
                 postConsultaSuccess = "Se ha creado la consulta"
@@ -78,7 +79,13 @@ class TokenViewModel : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
-                val response = recetaRepository.getRecetas(token!!, orden, direccion, page)
+                val response = recetaRepository.getRecetas(
+                    token = token!!,
+                    page = page,
+                    orden = orden,
+                    propias = "true",
+                    direccion = direccion
+                )
 
                 if (recetasResponse == null || page == 1) {
                     recetasResponse = response
@@ -105,7 +112,8 @@ class TokenViewModel : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
-                val response = consultaRepository.getConsultas(token!!, orden, direccion, page)
+                val response =
+                    consultaRepository.getConsultas(token!!, orden, direccion, "true", page)
 
                 if (buscarConsultasResponse == null || page == 1) {
                     buscarConsultasResponse = response

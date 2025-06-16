@@ -7,9 +7,10 @@ class RecetaRepository {
     suspend fun getRecetas(
         token: String,
         orden: String,
+        propias: String,
         direccion: String,
         page: Int
     ): RecetasResponseModel {
-        return RetrofitClient.api.getRecetas("Bearer $token", page, orden, direccion)
+        return RetrofitClient.api.getRecetas("Bearer $token", page, orden, propias, direccion)
     }
 }

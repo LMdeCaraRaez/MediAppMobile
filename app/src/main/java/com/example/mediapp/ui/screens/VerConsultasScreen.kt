@@ -183,39 +183,45 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
                                 }
                             }
                         }
-                        item {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Button(onClick = {
-                                    scope.launch {
-                                        scrollState.scrollToItem(0)
-                                    }
-
-                                }, modifier = Modifier.padding(bottom = 8.dp), colors = ButtonDefaults.buttonColors(
-                                    containerColor =  Color(0xFF1565C0)
-                                )) {
-                                    Icon(
-                                        imageVector = Icons.Filled.KeyboardArrowUp,
-                                        contentDescription = "Volver arriba"
-                                    )
-                                }
-
-                                if (viewModel.buscarConsultasResponse!!.resultados.size === viewModel.buscarConsultasResponse!!.totalItems) {
-                                    Text(
-                                        text = "No hay mas resultados",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 18.sp
-                                    )
-                                } else {
+                        if (viewModel.buscarConsultasResponse!!.resultados.isEmpty()) {
+                            item {
+                                Text(text = "No hay ninguna consulta para ver")
+                            }
+                        } else {
+                            item {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
                                     Button(onClick = {
-                                        loadedPages.intValue = loadedPages.intValue + 1
-                                        viewModel.getConsultas(page = loadedPages.intValue)
-                                    }, colors = ButtonDefaults.buttonColors(
+                                        scope.launch {
+                                            scrollState.scrollToItem(0)
+                                        }
+
+                                    }, modifier = Modifier.padding(bottom = 8.dp), colors = ButtonDefaults.buttonColors(
                                         containerColor =  Color(0xFF1565C0)
                                     )) {
-                                        Text(text = "Cargar más")
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowUp,
+                                            contentDescription = "Volver arriba"
+                                        )
+                                    }
+
+                                    if (viewModel.buscarConsultasResponse!!.resultados.size === viewModel.buscarConsultasResponse!!.totalItems) {
+                                        Text(
+                                            text = "No hay mas resultados",
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 18.sp
+                                        )
+                                    } else {
+                                        Button(onClick = {
+                                            loadedPages.intValue = loadedPages.intValue + 1
+                                            viewModel.getConsultas(page = loadedPages.intValue)
+                                        }, colors = ButtonDefaults.buttonColors(
+                                            containerColor =  Color(0xFF1565C0)
+                                        )) {
+                                            Text(text = "Cargar más")
+                                        }
                                     }
                                 }
                             }
