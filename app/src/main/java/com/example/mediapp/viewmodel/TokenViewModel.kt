@@ -35,7 +35,6 @@ class TokenViewModel : ViewModel() {
     var deleteSuccess by mutableStateOf<String?>(null)
         private set
     var postConsultaSuccess by mutableStateOf<String?>(null)
-        private set
 
     var user by mutableStateOf<UserModelResponse?>(null)
         private set

@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -105,7 +106,12 @@ fun VerRecetas(viewModel: TokenViewModel, navController: NavHostController) {
                         state = scrollState
                     ) {
                         item {
-                            Text(text = "Tus Recetas", fontWeight = FontWeight.Bold, fontSize = 32.sp, modifier = Modifier.padding(bottom = 12.dp))
+                            Text(
+                                text = "Tus Recetas",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 32.sp,
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            )
                         }
 
                         items(viewModel.recetasResponse!!.resultados.size) { index ->
@@ -142,7 +148,9 @@ fun VerRecetas(viewModel: TokenViewModel, navController: NavHostController) {
                                     }
 
 
-                                    if (ZonedDateTime.parse(receta.receta.fechaFinTratamiento).isAfter(ZonedDateTime.now())) {
+                                    if (ZonedDateTime.parse(receta.receta.fechaFinTratamiento)
+                                            .isAfter(ZonedDateTime.now())
+                                    ) {
                                         Text(
                                             text = "Fin del tratamiento:",
                                             fontSize = 14.sp,
@@ -168,7 +176,8 @@ fun VerRecetas(viewModel: TokenViewModel, navController: NavHostController) {
                                             color = MaterialTheme.colorScheme.onSurface
                                         )
                                     } else {
-                                        Text(text = "Tratamiento ya finalizado",
+                                        Text(
+                                            text = "Tratamiento ya finalizado",
                                             fontSize = 16.sp,
                                             fontWeight = FontWeight.Medium,
                                             color = Color.Red
@@ -182,12 +191,18 @@ fun VerRecetas(viewModel: TokenViewModel, navController: NavHostController) {
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Button(onClick = {
-                                    scope.launch {
-                                        scrollState.scrollToItem(0)
-                                    }
+                                Button(
+                                    onClick = {
+                                        scope.launch {
+                                            scrollState.scrollToItem(0)
+                                        }
 
-                                }, modifier = Modifier.padding(bottom = 8.dp)) {
+                                    },
+                                    modifier = Modifier.padding(bottom = 8.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color(0xFF1565C0)
+                                    )
+                                ) {
                                     Icon(
                                         imageVector = Icons.Filled.KeyboardArrowUp,
                                         contentDescription = "Volver arriba"
@@ -201,10 +216,14 @@ fun VerRecetas(viewModel: TokenViewModel, navController: NavHostController) {
                                         fontSize = 18.sp
                                     )
                                 } else {
-                                    Button(onClick = {
-                                        loadedPages.intValue = loadedPages.intValue + 1
-                                        viewModel.getRecetas(page = loadedPages.intValue)
-                                    }) {
+                                    Button(
+                                        onClick = {
+                                            loadedPages.intValue = loadedPages.intValue + 1
+                                            viewModel.getRecetas(page = loadedPages.intValue)
+                                        }, colors = ButtonDefaults.buttonColors(
+                                            containerColor = Color(0xFF1565C0)
+                                        )
+                                    ) {
                                         Text(text = "Cargar más")
                                     }
                                 }

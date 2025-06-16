@@ -1,8 +1,9 @@
 package com.example.mediapp.ui.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,6 +43,8 @@ import androidx.navigation.NavHostController
 import com.example.mediapp.ui.theme.Secundario
 import com.example.mediapp.viewmodel.TokenViewModel
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 
 @SuppressLint("NewApi")
@@ -172,29 +175,56 @@ fun PedirConsultaScreen(viewModel: TokenViewModel, navController: NavHostControl
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Button(onClick = {
+                    Button(
+                        onClick = {
 
-                        if (!consultaPedida) {
-                            consultaPedida = true
-                            if (mostrarErrorFecha || hora.value == "") {
-                                Toast.makeText(
-                                    context,
-                                    "Escribe unas fecha y hora correctas por favor",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                consultaPedida = false
-                            } else {
-                                viewModel.postConsulta(
-                                    fecha = fecha.value,
-                                    horaInicio = hora.value,
-                                    medico = numeroMedico!!.toInt(),
-                                    paciente = viewModel.user!!.id,
-                                )
+                            if (!consultaPedida) {
+                                consultaPedida = true
+                                if (mostrarErrorFecha || hora.value == "") {
+                                    Toast.makeText(
+                                        context,
+                                        "Escribe unas fecha y hora correctas por favor",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    consultaPedida = false
+                                } else {
+
+                                    val resultado = compararHora(hora.value)
+
+                                    val currentDate = LocalDate.now()
+                                    val formattedDate =
+                                        currentDate.format(DateTimeFormatter.ISO_DATE)
+
+                                    if (fecha.value == formattedDate) {
+                                        if (resultado !== -1) {
+                                            viewModel.postConsulta(
+                                                fecha = fecha.value,
+                                                horaInicio = hora.value,
+                                                medico = numeroMedico!!.toInt(),
+                                                paciente = viewModel.user!!.id,
+                                            )
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "Selecciona una fecha que no haya pasado ya",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                            consultaPedida = false
+                                        }
+                                    } else {
+                                        viewModel.postConsulta(
+                                            fecha = fecha.value,
+                                            horaInicio = hora.value,
+                                            medico = numeroMedico!!.toInt(),
+                                            paciente = viewModel.user!!.id,
+                                        )
+                                    }
+                                }
                             }
-                        }
-
-
-                    }) {
+                        }, colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF1565C0)
+                        )
+                    ) {
                         Text("Crear")
                     }
                     Button(
@@ -212,6 +242,7 @@ fun PedirConsultaScreen(viewModel: TokenViewModel, navController: NavHostControl
         postConsultaSuccess?.let {
             if (postConsultaSuccess === "Se ha creado la consulta") {
                 Toast.makeText(context, "Se ha creado la consulta", Toast.LENGTH_LONG).show()
+                viewModel.postConsultaSuccess = null
                 navController.popBackStack()
             } else if (postConsultaSuccess === "cargando") {
                 Toast.makeText(context, "Cargando", Toast.LENGTH_LONG).show()
@@ -263,5 +294,18 @@ fun SimpleDropdownMenu(
                 )
             }
         }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun compararHora(timeString: String): Int {
+    val formatter = DateTimeFormatter.ofPattern("HH:mm")
+    var parsedTime = LocalTime.parse(timeString, formatter)
+    val now = LocalTime.now().plusHours(2)
+
+    return when {
+        parsedTime.isBefore(now) -> -1
+        parsedTime.isAfter(now) -> 1
+        else -> 0
     }
 }

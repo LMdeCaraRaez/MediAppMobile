@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -159,11 +160,17 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
                                             fontSize = 16.sp,
                                             color = Color.Red
                                         )
-                                        Button(onClick = {
-                                            Log.e("consultaID", consulta.consulta.id.toString())
+                                        Button(
+                                            onClick = {
+                                                Log.e("consultaID", consulta.consulta.id.toString())
 
-                                            viewModel.deleteConsulta(consulta.consulta.id.toString())
-                                        }, modifier = Modifier.padding(top = 12.dp)) {
+                                                viewModel.deleteConsulta(consulta.consulta.id.toString())
+                                            },
+                                            modifier = Modifier.padding(top = 12.dp),
+                                            colors = ButtonDefaults.buttonColors(
+                                                containerColor = Color(0xFF1565C0)
+                                            )
+                                        ) {
                                             Text(
                                                 text = "Cancelar Consulta",
                                                 textAlign = TextAlign.Center,
@@ -186,7 +193,9 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
                                         scrollState.scrollToItem(0)
                                     }
 
-                                }, modifier = Modifier.padding(bottom = 8.dp)) {
+                                }, modifier = Modifier.padding(bottom = 8.dp), colors = ButtonDefaults.buttonColors(
+                                    containerColor =  Color(0xFF1565C0)
+                                )) {
                                     Icon(
                                         imageVector = Icons.Filled.KeyboardArrowUp,
                                         contentDescription = "Volver arriba"
@@ -203,7 +212,9 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
                                     Button(onClick = {
                                         loadedPages.intValue = loadedPages.intValue + 1
                                         viewModel.getConsultas(page = loadedPages.intValue)
-                                    }) {
+                                    }, colors = ButtonDefaults.buttonColors(
+                                        containerColor =  Color(0xFF1565C0)
+                                    )) {
                                         Text(text = "Cargar más")
                                     }
                                 }
@@ -228,14 +239,22 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
 
             LaunchedEffect(error) {
                 error?.let {
-                    Toast.makeText(context, "Error al intentar borrar la consulta", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        context,
+                        "Error al intentar borrar la consulta",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
 
             LaunchedEffect(deleteSuccess) {
                 deleteSuccess?.let {
                     if (deleteSuccess === "Consulta borrada correctamente")
-                    Toast.makeText(context, "Se ha borrado la consulta, cargando lista de nuevo...", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            context,
+                            "Se ha borrado la consulta, cargando lista de nuevo...",
+                            Toast.LENGTH_LONG
+                        ).show()
                 }
             }
         }

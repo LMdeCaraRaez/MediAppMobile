@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -79,7 +80,9 @@ fun LoginScreen(
 
                 Button(
                     onClick = { viewModel.login(username, password) },
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier.align(Alignment.CenterHorizontally), colors = ButtonDefaults.buttonColors(
+                        containerColor =  Color(0xFF1565C0)
+                    )
                 ) {
                     Text("Iniciar sesión")
                 }
