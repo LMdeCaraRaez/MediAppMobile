@@ -60,7 +60,7 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
     }
 
     val error = viewModel.error
-    val deleteSuccess = viewModel.deleteSuccess
+    var deleteSuccess = viewModel.deleteSuccess
     val context = LocalContext.current
     val scrollState = LazyListState()
     val scope = rememberCoroutineScope()
@@ -255,12 +255,14 @@ fun VerConsultas(viewModel: TokenViewModel, navController: NavHostController) {
 
             LaunchedEffect(deleteSuccess) {
                 deleteSuccess?.let {
-                    if (deleteSuccess === "Consulta borrada correctamente")
+                    if (deleteSuccess === "Consulta borrada correctamente") {
                         Toast.makeText(
                             context,
                             "Se ha borrado la consulta, cargando lista de nuevo...",
                             Toast.LENGTH_LONG
                         ).show()
+                        viewModel.deleteSuccess = ""
+                    }
                 }
             }
         }
